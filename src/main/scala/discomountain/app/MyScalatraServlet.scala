@@ -3,7 +3,7 @@ package discomountain.app
 import org.scalatra._
 import scalate.ScalateSupport
 
-class MyScalatraServlet extends Project_dkStack {
+class MyScalatraServlet extends ProjectDkStack {
 
   get("/") {
     <html>
