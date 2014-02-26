@@ -19,6 +19,22 @@ function drawPlanets(planets) {
 
 function connectToServer() {
 	// TODO 
+	var socket = atmosphere;
+	var request = new atmosphere.AtmosphereRequest();
+	
+	var request = {
+		url : '/game',
+		contentType : 'application/json',
+		logLevel : 'debug',
+		transport : 'websocket',
+		fallbackTransport: 'long-polling'
+	};
+	request.onOpen = function(response) {
+        console.log('Atmosphere connected using ' + response.transport);
+		
+    };
+    
+    var subSocket = socket.subscribe(request);
 }
 
 function start() {
