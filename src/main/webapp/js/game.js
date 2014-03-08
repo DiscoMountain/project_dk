@@ -34,19 +34,18 @@ var game;
 	Game.prototype.drawStarMap = function() {
 		var svgContainer = d3.select("body").append("svg").attr("width", 300)
 				.attr("height", 300);
-		console.log(currentStarSystem)
+		svgContainer.append("circle").attr("cx", 150).attr("cy", 150).attr("r", currentStarSystem.sun.radius);
 		var planets = currentStarSystem.sun.planets;
-		console.log(planets);
 		for (var i = 0; i < planets.length; i++) {
-			svgContainer.append("circle").attr("cx", 100 + 50 * i).attr("cy",
-					100 + 50 * i).attr("r", planets[i].starObject.radius);
+			var distance = planets[i].distance;
+			svgContainer.append("circle").attr("cx", 150 + distance).attr("cy",
+					150).attr("r", planets[i].starObject.radius);
 		}
 	}
 
 	$(document).ready(function(){
 		game = new Game();
 		game.connect();
-		//game.drawStarMap();	
 	});
 	
 })();

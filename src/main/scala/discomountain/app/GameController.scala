@@ -47,7 +47,7 @@ class GameController extends ScalatraServlet with ScalateSupport with JValueResu
     }
     val planet1 = new Planet("p1", 7, Nil)
     val planet2 = new Planet("p2", 6, Nil)
-    val sun = new Sun("sun", 30, ObjectDistance(planet1, 100) :: ObjectDistance(planet2, 200) :: Nil)
+    val sun = new Sun("sun", 30, ObjectDistance(planet1, 70) :: ObjectDistance(planet2, 120) :: Nil)
     val system = new SolarSystem("xz", sun)
     write(system)
   }
