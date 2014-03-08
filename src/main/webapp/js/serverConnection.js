@@ -12,8 +12,13 @@ var serverConnection = (function() {
 	};
 	request.onOpen = function(response) {
 		console.log('Atmosphere connected using ' + response.transport);
+		game.connected();
 
 	};
+	
+	request.onMessage = function(rs) {
+		game.dataReceived(JSON.parse(rs.responseBody))
+	}
 
 	var subSocket;
 
