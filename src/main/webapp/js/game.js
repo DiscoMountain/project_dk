@@ -1,9 +1,12 @@
 var game;
 
 (function() {
-	
+
+	var width = 500;
+	var height = 500;
+
 	var currentStarSystem = {};
-	
+
 	function Game() {
 		console.log('game created');
 	}
@@ -16,11 +19,11 @@ var game;
 	Game.prototype.connect = function() {
 		serverConnection.connect(game);
 	}
-	
+
 	Game.prototype.connected = function() {
 		serverConnection.send('{"command" : "getInitialState", "id" : "1"}');
 	}
-	
+
 	Game.prototype.setCurrentStarSystem = function(starSystem) {
 		currentStarSystem = starSystem;
 		this.drawStarMap();
@@ -32,20 +35,23 @@ var game;
 	}
 
 	Game.prototype.drawStarMap = function() {
-		var svgContainer = d3.select("body").append("svg").attr("width", 300)
-				.attr("height", 300);
-		svgContainer.append("circle").attr("cx", 150).attr("cy", 150).attr("r", currentStarSystem.sun.radius);
+		var svgContainer = d3.select("body").append("svg").attr("width", width)
+				.attr("height", height);
+		svgContainer.append("circle").attr("cx", width / 2).attr("cy",
+				height / 2).attr("r", currentStarSystem.sun.radius).attr(
+				"fill", "yellow");
 		var planets = currentStarSystem.sun.planets;
 		for (var i = 0; i < planets.length; i++) {
 			var distance = planets[i].distance;
-			svgContainer.append("circle").attr("cx", 150 + distance).attr("cy",
-					150).attr("r", planets[i].starObject.radius);
+			svgContainer.append("circle").attr("cx", width / 2 + distance)
+					.attr("cy", height / 2).attr("r",
+							planets[i].spaceObject.radius).attr("fill", "blue");
 		}
 	}
 
-	$(document).ready(function(){
+	$(document).ready(function() {
 		game = new Game();
 		game.connect();
 	});
-	
+
 })();
