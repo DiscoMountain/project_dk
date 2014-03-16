@@ -41,24 +41,26 @@ var game;
 				height / 2).attr("r", currentStarSystem.sun.radius).attr(
 				"fill", "yellow");
 		var planets = currentStarSystem.sun.planets;
-		this.drawOrbitingObject(width / 2, height / 2, planets, svgContainer);
+		this.drawOrbitingObject(new Point(width / 2, height / 2), 
+				planets, svgContainer);
 	}
 
-	Game.prototype.drawOrbitingObject = function(centerX, centerY, orbiting,
+	Game.prototype.drawOrbitingObject = function(center, orbiting,
 			cont) {
 		for (var i = 0; i < orbiting.length; i++) {
-			var orbit = getOrbit();
-			var distX = orbiting[i].distance * orbit[0];
-			var distY = orbiting[i].distance * orbit[1];
-			cont.append("circle").attr("cx", centerX + distX).attr("cy",
-					centerY + distY).attr("r", orbiting[i].spaceObject.radius).attr(
+			var orbit = getOrbitPoint();
+			var distX = orbiting[i].distance * orbit.x;
+			var distY = orbiting[i].distance * orbit.y;
+			cont.append("circle").attr("cx", center.x + distX).attr("cy",
+					center.y + distY).attr("r", orbiting[i].spaceObject.radius).attr(
 					"fill", "blue");
 		}
 	}
 	
-	function getOrbit() {
+	function getOrbitPoint() {
 		var angle = Math.random() * 2 * Math.PI;
-		return [Math.cos(angle), Math.sin(angle)]
+		return new Point(Math.cos(angle), Math.sin(angle))
+		
 	}
 
 	$(document).ready(function() {
