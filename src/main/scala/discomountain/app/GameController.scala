@@ -3,7 +3,7 @@ package discomountain.app
 import org.scalatra._
 import scalate.ScalateSupport
 import org.scalatra.atmosphere._
-import org.scalatra.json.{ JValueResult, JacksonJsonSupport }
+import org.scalatra.json.{JValueResult, JacksonJsonSupport}
 import org.json4s._
 import JsonDSL._
 import java.util.Date
@@ -14,8 +14,10 @@ import ExecutionContext.Implicits.global
 import scala.None
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.{read, write}
+import scala.collection.mutable
 
-class GameController extends ScalatraServlet with ScalateSupport with JValueResult with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
+class GameController extends ScalatraServlet with ScalateSupport with JValueResult
+with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
 
   protected implicit val jsonFormats: Formats = DefaultFormats
 
@@ -23,7 +25,7 @@ class GameController extends ScalatraServlet with ScalateSupport with JValueResu
     new AtmosphereClient {
       def receive: AtmoReceive = {
         case Connected => {
-          println("client connected")
+          println("Client %s is connected" format uuid)
         }
         case Disconnected(ClientDisconnected, _) =>
           println("Client disconnected from server %s" format uuid)
@@ -32,8 +34,14 @@ class GameController extends ScalatraServlet with ScalateSupport with JValueResu
           println("Server disconnected the client %s" format uuid)
         case Error(Some(error)) =>
         case TextMessage(text) => send("ECHO (text): " + text)
-        case JsonMessage(JObject(JField("command", JString("getInitialState")) :: fields)) =>
+        case JsonMessage(JObject(JField("command", JString("getInitialState")) :: fields)) => {
+          println("Client %s is requesting initial state" format uuid)
           send(handleInitialState(fields))
+        }
+
+        case JsonMessage(JObject(JField("command", JString("getObjectData")) :: fields)) =>
+          println("Client %s is requesting object data" format uuid)
+          send(getObjectData(fields))
         case JsonMessage(json) => send("ECHO (json): " + json)
       }
     }
@@ -47,9 +55,15 @@ class GameController extends ScalatraServlet with ScalateSupport with JValueResu
     }
     val planet1 = new Planet("p1", 7, Nil)
     val planet2 = new Planet("p2", 6, Nil)
-    val sun = new Sun("sun", 30, ObjectDistance(planet1, 70) :: ObjectDistance(planet2, 120) :: Nil)
+    val sun = new Sun("sun", 30,
+      ObjectDistance(planet1, 70) :: ObjectDistance(planet2, 120) :: Nil)
     val system = new SolarSystem("xz", sun)
-    write(system)
+
+    write(new ResponseObject("initialState", system))
+  }
+
+  def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
+    write(new ResponseObject("objectData", new RawData("just raw data")))
   }
 
   error {
@@ -60,9 +74,10 @@ class GameController extends ScalatraServlet with ScalateSupport with JValueResu
     // remove content type in case it was set through an action
     contentType = null
     // Try to render a ScalateTemplate if no route matched
-    findTemplate(requestPath) map { path =>
-      contentType = "text/html"
-      layoutTemplate(path)
+    findTemplate(requestPath) map {
+      path =>
+        contentType = "text/html"
+        layoutTemplate(path)
     } orElse serveStaticResource() getOrElse resourceNotFound()
   }
 

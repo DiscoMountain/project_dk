@@ -6,6 +6,7 @@ var game;
 	var height = 500;
 
 	var currentStarSystem = {};
+	var selectedLocation;
 
 	function Game() {
 		console.log('game created');
@@ -13,7 +14,15 @@ var game;
 
 	Game.prototype.dataReceived = function(data) {
 		console.log('data received' + data);
-		this.setCurrentStarSystem(data);
+		if (data.head == 'initialState') {
+		    console.log('received initial state:' + data.body);
+		    this.setCurrentStarSystem(data.body);
+		} else if (data.head == 'objectData') {
+            console.log('received object data: ' + data.body);
+            this.setInfoText(data.body);
+		} else {
+		    console.log('can not handle this data atm' + data.body);
+		}
 	}
 
 	Game.prototype.connect = function() {
@@ -35,11 +44,14 @@ var game;
 	}
 
 	Game.prototype.drawStarMap = function() {
-		var svgContainer = d3.select("body").append("svg").attr("width", width)
+		var svgContainer = d3.select("#mapArea").append("svg").attr("width", width)
 				.attr("height", height);
 		svgContainer.append("circle").attr("cx", width / 2).attr("cy",
 				height / 2).attr("r", currentStarSystem.sun.radius).attr(
-				"fill", "yellow");
+				"fill", "yellow").on("click", function() {
+                    selectedLocation = currentStarSystem.name + "," + currentStarSystem.sun.name;
+                    fetchData();
+				});
 		var planets = currentStarSystem.sun.planets;
 		this.drawOrbitingObject(new Point(width / 2, height / 2), 
 				planets, svgContainer);
@@ -51,17 +63,31 @@ var game;
 			var orbit = getOrbitPoint();
 			var distX = orbiting[i].distance * orbit.x;
 			var distY = orbiting[i].distance * orbit.y;
+			var spaceObject = orbiting[i].spaceObject;
+			console.log(spaceObject);
 			cont.append("circle").attr("cx", center.x + distX).attr("cy",
-					center.y + distY).attr("r", orbiting[i].spaceObject.radius).attr(
-					"fill", "blue");
+					center.y + distY).attr("r", spaceObject.radius).attr(
+					"fill", "blue").on("click", createOnClickForPlanet(spaceObject));
 		}
 	}
-	
-	function getOrbitPoint() {
-		var angle = Math.random() * 2 * Math.PI;
-		return new Point(Math.cos(angle), Math.sin(angle))
-		
+
+	Game.prototype.setInfoText = function(infoText) {
+        $("#rawData").val(infoText.data);
 	}
+
+	function createOnClickForPlanet(spaceObject) {
+	    return function() {
+	        selectedLocation = currentStarSystem.name + "," + currentStarSystem.sun.name +
+                                 "," + spaceObject.name;
+            fetchData();
+	    }
+	}
+
+	function fetchData() {
+        console.log(selectedLocation);
+        serverConnection.send('{"command" : "getObjectData" , "object"  : "' + selectedLocation + '"}')
+	}
+
 
 	$(document).ready(function() {
 		game = new Game();
