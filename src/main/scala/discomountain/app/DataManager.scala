@@ -15,17 +15,17 @@ object DataManager {
   }
 
   def getSunData(solarSystemId: String, sunId: String) = {
-    "This is the sun in {solarSystemId}.\n" +
-      "The sun is called {sunId}."
+    s"This is the sun in $solarSystemId.\n" +
+      s"The sun is called $sunId."
   }
 
   def getPlanetData(solarSystemId: String, planetId: String) = {
-    "This is the planet in {solarSystemId}.\n" +
-      "The planet is called {planetId}."
+    s"This is the planet in $solarSystemId.\n" +
+      s"The planet is called $planetId."
   }
 
   def getMoonData(solarSystemId: String, planetId: String, moonId: String) = {
-    "This is a moon in {solarSystemId}, orbiting planet {planetId}.\n" +
-      "The moon is called {moonId}"
+    s"This is a moon in $solarSystemId, orbiting planet $planetId.\n" +
+      s"The moon is called $moonId"
   }
 }

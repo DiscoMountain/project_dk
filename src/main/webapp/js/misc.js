@@ -3,9 +3,10 @@ function Point(x, y) {
 	this.y = y;
 }
 
-function getOrbitPoint() {
+function getOrbitPoint(distance) {
+    if (typeof(distance) == 'undefined') distance = 1;
     var angle = Math.random() * 2 * Math.PI;
-    return new Point(Math.cos(angle), Math.sin(angle))
+    return new Point(Math.cos(angle) * distance , Math.sin(angle) * distance)
 
 }
 

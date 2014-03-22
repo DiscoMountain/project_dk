@@ -53,20 +53,18 @@ var game;
                     fetchData();
 				});
 		var planets = currentStarSystem.sun.planets;
-		this.drawOrbitingObject(new Point(width / 2, height / 2), 
+		this.drawPlanets(new Point(width / 2, height / 2),
 				planets, svgContainer);
 	}
 
-	Game.prototype.drawOrbitingObject = function(center, orbiting,
+	Game.prototype.drawPlanets = function(center, orbiting,
 			cont) {
 		for (var i = 0; i < orbiting.length; i++) {
-			var orbit = getOrbitPoint();
-			var distX = orbiting[i].distance * orbit.x;
-			var distY = orbiting[i].distance * orbit.y;
+			var orbit = getOrbitPoint(orbiting[i].distance);
 			var spaceObject = orbiting[i].spaceObject;
 			console.log(spaceObject);
-			cont.append("circle").attr("cx", center.x + distX).attr("cy",
-					center.y + distY).attr("r", spaceObject.radius).attr(
+			cont.append("circle").attr("cx", center.x + orbit.x).attr("cy",
+					center.y + orbit.y).attr("r", spaceObject.radius).attr(
 					"fill", "blue").on("click", createOnClickForPlanet(spaceObject));
 		}
 	}

@@ -54,7 +54,7 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
   }
 
   def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
-    write(new ResponseObject("objectData", new RawData("just raw data")))
+    write(new ResponseObject("objectData", new RawData(new GameManager().getObjectData(fields(0)._2.toString()))))
   }
 
   error {
