@@ -49,17 +49,8 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
 
   def handleInitialState(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
     implicit val formats = Serialization.formats(NoTypeHints)
-    for ((s, v) <- fields) {
-      println(s)
-      println(v)
-    }
-    val planet1 = new Planet("p1", 7, Nil)
-    val planet2 = new Planet("p2", 6, Nil)
-    val sun = new Sun("sun", 30,
-      ObjectDistance(planet1, 70) :: ObjectDistance(planet2, 120) :: Nil)
-    val system = new SolarSystem("xz", sun)
 
-    write(new ResponseObject("initialState", system))
+    write(new ResponseObject("initialState", new GameManager().getCurrentSystem("1")))
   }
 
   def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {

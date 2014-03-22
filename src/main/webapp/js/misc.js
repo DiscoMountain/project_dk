@@ -8,3 +8,8 @@ function getOrbitPoint() {
     return new Point(Math.cos(angle), Math.sin(angle))
 
 }
+
+function SelectedObject(solarSystem, object) {
+    this.solarSystem = solarSystem;
+    this.object = object;
+}
