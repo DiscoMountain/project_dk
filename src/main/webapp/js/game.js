@@ -16,7 +16,7 @@ var game;
 		console.log('data received' + data);
 		if (data.head == 'initialState') {
 		    console.log('received initial state:' + data.body);
-		    this.setCurrentStarSystem(data.body);
+		    this.setCurrentStarSystem(JSON.parse(data.body.data));
 		} else if (data.head == 'objectData') {
             console.log('received object data: ' + data.body);
             this.setInfoText(data.body);
@@ -60,8 +60,8 @@ var game;
 	Game.prototype.drawPlanets = function(center, orbiting,
 			cont) {
 		for (var i = 0; i < orbiting.length; i++) {
-			var orbit = getOrbitPoint(orbiting[i].distance);
-			var spaceObject = orbiting[i].spaceObject;
+			var orbit = getOrbitPoint(orbiting[i][1]);
+			var spaceObject = orbiting[i][0];
 			console.log(spaceObject);
 			cont.append("circle").attr("cx", center.x + orbit.x).attr("cy",
 					center.y + orbit.y).attr("r", spaceObject.radius).attr(

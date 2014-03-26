@@ -3,7 +3,7 @@ package discomountain.app
 
 class GameManager {
 
-  def getCurrentSystem(id: String) = {
+  def getCurrentSystem(id: String): String = {
     DataManager.getSolarSystem(id)
   }
 

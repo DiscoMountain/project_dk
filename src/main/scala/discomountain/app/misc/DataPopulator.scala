@@ -9,7 +9,6 @@ import discomountain.app.{SolarSystem, ObjectDistance, Sun, Planet}
  */
 object DataPopulator extends App {
 
-  val builder = MongoDBObject.newBuilder
   val mongoClient = MongoClient("localhost", 27017)("DiscoKings")
   val planet1 = MongoDBObject("name" -> "p1",
     "radius" -> 7)

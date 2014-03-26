@@ -50,7 +50,9 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
   def handleInitialState(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
     implicit val formats = Serialization.formats(NoTypeHints)
 
-    write(new ResponseObject("initialState", new GameManager().getCurrentSystem("1")))
+    val solarSystemData: String = new GameManager().getCurrentSystem("1")
+    write(new ResponseObject("initialState", new RawData(solarSystemData)))
+
   }
 
   def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {

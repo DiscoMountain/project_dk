@@ -1,17 +1,18 @@
 package discomountain.app
 
+import com.mongodb.casbah.Imports._
+
+
 
 object DataManager {
 
-  private val planet1 = new Planet("p1", 7, Nil)
-  private val planet2 = new Planet("p2", 6, Nil)
-  private val sun = new Sun("sun", 30,
-    ObjectDistance(planet1, 70) :: ObjectDistance(planet2, 120) :: Nil)
-  private val system = new SolarSystem("xz", sun)
+  private val mongoClient = MongoClient("localhost", 27017)("DiscoKings")
 
-  def getSolarSystem(id: String) = {
+  def getSolarSystem(id: String): String = {
     // Always return the same system for now
-    system
+    val mongoSystem = mongoClient.getCollection("solarsystems").findOne()
+
+    mongoSystem.toString
   }
 
   def getSunData(solarSystemId: String, sunId: String) = {
