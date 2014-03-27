@@ -42,6 +42,8 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
         case JsonMessage(JObject(JField("command", JString("getObjectData")) :: fields)) =>
           println("Client %s is requesting object data" format uuid)
           send(getObjectData(fields))
+        case JsonMessage(JObject(JField("command", JString("getPlayerPosition")) :: fields)) =>
+          send(getPlayerPosition)
         case JsonMessage(json) => send("ECHO (json): " + json)
       }
     }
@@ -50,13 +52,17 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
   def handleInitialState(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
     implicit val formats = Serialization.formats(NoTypeHints)
 
-    val solarSystemData: String = new GameManager().getCurrentSystem("1")
+    val solarSystemData: String = GameManager.getCurrentSystem("1")
     write(new ResponseObject("initialState", new RawData(solarSystemData)))
 
   }
 
   def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
-    write(new ResponseObject("objectData", new RawData(new GameManager().getObjectData(fields(0)._2.toString()))))
+    write(new ResponseObject("objectData", new RawData(GameManager.getObjectData(fields(0)._2.toString()))))
+  }
+
+  def getPlayerPosition() = {
+    write(new ResponseObject("playerPosition", new RawData(GameManager.getPlayerPosition("Alpha"))))
   }
 
   error {

@@ -17,6 +17,7 @@ var serverConnection = (function() {
 	};
 	
 	request.onMessage = function(rs) {
+	    console.log(rs)
 		game.dataReceived(JSON.parse(rs.responseBody))
 	}
 

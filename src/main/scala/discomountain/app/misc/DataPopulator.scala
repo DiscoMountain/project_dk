@@ -38,7 +38,7 @@ object DataPopulator extends App {
       "planet" -> "p2")
 
     val defaultUser = MongoDBObject("name" -> "Alpha",
-      "startPosition" -> startPosition)
+      "position" -> startPosition)
 
     mongoClient.getCollection("players").insert(defaultUser)
   }

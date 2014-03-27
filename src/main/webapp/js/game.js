@@ -5,6 +5,7 @@ var game;
 	var width = 500;
 	var height = 500;
 
+    var player = "alpha"
 	var currentStarSystem = {};
 	var selectedLocation;
 
@@ -20,6 +21,8 @@ var game;
 		} else if (data.head == 'objectData') {
             console.log('received object data: ' + data.body);
             this.setInfoText(data.body);
+		} else if(data.head == 'playerPosition') {
+		    console.log('received player position: ' + data.body);
 		} else {
 		    console.log('can not handle this data atm' + data.body);
 		}
@@ -31,6 +34,7 @@ var game;
 
 	Game.prototype.connected = function() {
 		serverConnection.send('{"command" : "getInitialState", "id" : "1"}');
+		serverConnection.send('{"command" : "getPlayerPosition"}');
 	}
 
 	Game.prototype.setCurrentStarSystem = function(starSystem) {
@@ -62,7 +66,6 @@ var game;
 		for (var i = 0; i < orbiting.length; i++) {
 			var orbit = getOrbitPoint(orbiting[i][1]);
 			var spaceObject = orbiting[i][0];
-			console.log(spaceObject);
 			cont.append("circle").attr("cx", center.x + orbit.x).attr("cy",
 					center.y + orbit.y).attr("r", spaceObject.radius).attr(
 					"fill", "blue").on("click", createOnClickForPlanet(spaceObject));

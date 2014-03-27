@@ -1,7 +1,7 @@
 package discomountain.app
 
 
-class GameManager {
+object GameManager {
 
   def getCurrentSystem(id: String): String = {
     DataManager.getSolarSystem(id)
@@ -15,5 +15,9 @@ class GameManager {
       case 4 => DataManager.getMoonData(parts(0), parts(1), parts(2))
     }
 
+  }
+
+  def getPlayerPosition(name: String): String = {
+    DataManager.getPlayerPosition(name)
   }
 }

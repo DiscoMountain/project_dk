@@ -15,6 +15,11 @@ object DataManager {
     mongoSystem.toString
   }
 
+  def getPlayerPosition(name: String): String = {
+    val query = MongoDBObject("name" -> name)
+    mongoClient.getCollection("players").findOne(query).get("position").toString
+  }
+
   def getSunData(solarSystemId: String, sunId: String) = {
     s"This is the sun in $solarSystemId.\n" +
       s"The sun is called $sunId."
