@@ -21,7 +21,7 @@ var game;
 		} else if (data.head == 'objectData') {
             console.log('received object data: ' + data.body);
             this.setInfoText(data.body);
-		} else if(data.head == 'playerPosition') {
+		} else if (data.head == 'playerPosition') {
 		    console.log('received player position: ' + data.body);
 		} else {
 		    console.log('can not handle this data atm' + data.body);
@@ -29,12 +29,12 @@ var game;
 	}
 
 	Game.prototype.connect = function() {
-		serverConnection.connect(game);
+		dkConn.connect(game);
 	}
 
 	Game.prototype.connected = function() {
-		serverConnection.send('{"command" : "getInitialState", "id" : "1"}');
-		serverConnection.send('{"command" : "getPlayerPosition"}');
+		dkConn.getInitialState(1);
+		dkConn.getPlayerPosition();
 	}
 
 	Game.prototype.setCurrentStarSystem = function(starSystem) {
@@ -43,7 +43,6 @@ var game;
 	}
 
 	Game.prototype.getStarMap = function() {
-
 		return currentStarSystem;
 	}
 
@@ -86,7 +85,7 @@ var game;
 
 	function fetchData() {
         console.log(selectedLocation);
-        serverConnection.send('{"command" : "getObjectData" , "object"  : "' + selectedLocation + '"}')
+        dkConn.getLocationData(selectedLocation);
 	}
 
 

@@ -1,4 +1,4 @@
-var serverConnection = (function() {
+var dkConn = (function() {
 	var socket = atmosphere;
 	var request = new atmosphere.AtmosphereRequest();
 	var gameCallback;
@@ -21,6 +21,18 @@ var serverConnection = (function() {
 		game.dataReceived(JSON.parse(rs.responseBody))
 	}
 
+    function getInitialState(id) {
+        subSocket.push('{"command" : "getInitialState", "id" : '+ id + '}');
+    }
+
+    function getPlayerPosition() {
+        subSocket.push('{"command" : "getPlayerPosition"}');
+    }
+
+    function getLocationData(location) {
+        subSocket.push('{"command" : "getObjectData" , "object"  : "' + location + '"}');
+    }
+
 	var subSocket;
 
 	return {
@@ -28,8 +40,8 @@ var serverConnection = (function() {
 			subSocket = socket.subscribe(request);
 			gameCallback = game;
 		},
-		send : function(data) {
-			subSocket.push(data);
-		}
+		getInitialState : getInitialState,
+		getPlayerPosition : getPlayerPosition,
+		getLocationData : getLocationData
 	}
 }());
