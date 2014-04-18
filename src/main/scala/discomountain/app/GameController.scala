@@ -39,12 +39,15 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
           send(handleInitialState(fields))
         }
 
-        case JsonMessage(JObject(JField("command", JString("getObjectData")) :: fields)) =>
+        case JsonMessage(JObject(JField("command", JString("getObjectData")) ::
+            JField("object", JObject(data)))) =>
           println("Client %s is requesting object data" format uuid)
-          send(getObjectData(fields))
+          send(getObjectData(data))
         case JsonMessage(JObject(JField("command", JString("getPlayerPosition")) :: fields)) =>
           send(getPlayerPosition)
-        case JsonMessage(json) => send("ECHO (json): " + json)
+        case JsonMessage(json) =>
+          println("not supported : " + json)
+          send("ECHO (json): " + json)
       }
     }
   }
@@ -58,7 +61,8 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
   }
 
   def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
-    write(new ResponseObject("objectData", new RawData(GameManager.getObjectData(fields(0)._2.toString()))))
+    println(fields)
+    write(new ResponseObject("objectData", new RawData(GameManager.getObjectData(fields))))
   }
 
   def getPlayerPosition() = {

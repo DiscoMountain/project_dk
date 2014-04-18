@@ -9,7 +9,7 @@ object Project_dkBuild extends Build {
   val Organization = "discomountain"
   val Name = "project_dk"
   val Version = "0.1.0-SNAPSHOT"
-  val ScalaVersion = "2.10.3"
+  val ScalaVersion = "2.10.4"
   val ScalatraVersion = "2.2.2"
 
   lazy val project = Project(

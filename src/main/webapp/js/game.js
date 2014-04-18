@@ -52,7 +52,9 @@ var game;
 		svgContainer.append("circle").attr("cx", width / 2).attr("cy",
 				height / 2).attr("r", currentStarSystem.sun.radius).attr(
 				"fill", "yellow").on("click", function() {
-                    selectedLocation = currentStarSystem.name + "," + currentStarSystem.sun.name;
+                    selectedLocation = new Object();
+                    selectedLocation.system = currentStarSystem.name;
+                    selectedLocation.sun = currentStarSystem.sun.name;
                     fetchData();
 				});
 		var planets = currentStarSystem.sun.planets;
@@ -77,15 +79,16 @@ var game;
 
 	function createOnClickForPlanet(spaceObject) {
 	    return function() {
-	        selectedLocation = currentStarSystem.name + "," + currentStarSystem.sun.name +
-                                 "," + spaceObject.name;
+	        selectedLocation = new Object();
+            selectedLocation.system = currentStarSystem.name;
+            selectedLocation.planet = spaceObject.name;
             fetchData();
 	    }
 	}
 
 	function fetchData() {
         console.log(selectedLocation);
-        dkConn.getLocationData(selectedLocation);
+        dkConn.getLocationData(JSON.stringify(selectedLocation));
 	}
 
 
