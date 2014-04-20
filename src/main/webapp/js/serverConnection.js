@@ -33,8 +33,8 @@ var dkConn = (function() {
         var command = new Object();
         command.command = "getObjectData";
         command.object = location;
+        console.log(JSON.stringify(command));
         subSocket.push(JSON.stringify(command));
-        //subSocket.push('{"command" : "getObjectData" , "object"  : "' + location + '"}');
     }
 
 	var subSocket;

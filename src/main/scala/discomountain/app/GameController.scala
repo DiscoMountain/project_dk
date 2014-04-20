@@ -8,13 +8,13 @@ import org.json4s._
 import JsonDSL._
 import java.util.Date
 import java.text.SimpleDateFormat
-import org.fusesource.scalate.Template
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.None
 import org.json4s.jackson.Serialization
 import org.json4s.jackson.Serialization.{read, write}
 import scala.collection.mutable
+import org.json4s.JsonAST.JValue
 
 class GameController extends ScalatraServlet with ScalateSupport with JValueResult
 with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
@@ -38,11 +38,8 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
           println("Client %s is requesting initial state" format uuid)
           send(handleInitialState(fields))
         }
-
-        case JsonMessage(JObject(JField("command", JString("getObjectData")) ::
-            JField("object", JObject(data)))) =>
-          println("Client %s is requesting object data" format uuid)
-          send(getObjectData(data))
+        case JsonMessage(JObject(JField("command", JString("getObjectData")) :: fields)) =>
+          send(getObjectData(fields.head._2.asInstanceOf[JObject]))
         case JsonMessage(JObject(JField("command", JString("getPlayerPosition")) :: fields)) =>
           send(getPlayerPosition)
         case JsonMessage(json) =>
@@ -60,9 +57,8 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
 
   }
 
-  def getObjectData(fields: List[(String, org.json4s.JsonAST.JValue)]) = {
-    println(fields)
-    write(new ResponseObject("objectData", new RawData(GameManager.getObjectData(fields))))
+  def getObjectData(fields: JObject) = {
+    write(new ResponseObject("objectData", new RawData(GameManager.getObjectData(fields.obj))))
   }
 
   def getPlayerPosition() = {

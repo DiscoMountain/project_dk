@@ -88,7 +88,7 @@ var game;
 
 	function fetchData() {
         console.log(selectedLocation);
-        dkConn.getLocationData(JSON.stringify(selectedLocation));
+        dkConn.getLocationData(selectedLocation);
 	}
 
 
