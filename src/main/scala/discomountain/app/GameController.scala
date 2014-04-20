@@ -29,7 +29,6 @@ with JacksonJsonSupport with SessionSupport with AtmosphereSupport {
         }
         case Disconnected(ClientDisconnected, _) =>
           println("Client disconnected from server %s" format uuid)
-
         case Disconnected(ServerDisconnected, _) =>
           println("Server disconnected the client %s" format uuid)
         case Error(Some(error)) =>

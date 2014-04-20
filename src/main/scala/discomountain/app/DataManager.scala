@@ -3,7 +3,6 @@ package discomountain.app
 import com.mongodb.casbah.Imports._
 
 
-
 object DataManager {
 
   private val mongoClient = MongoClient("localhost", 27017)("DiscoKings")
@@ -21,13 +20,13 @@ object DataManager {
   }
 
   def getSunData(solarSystemId: String, sunId: String) = {
-    s"This is the sun in $solarSystemId.\n" +
-      s"The sun is called $sunId."
+    mongoClient.getCollection("suns").
+      findOne(MongoDBObject("system" -> solarSystemId, "name" -> sunId)).toString
   }
 
   def getPlanetData(solarSystemId: String, planetId: String) = {
-    s"This is the planet in $solarSystemId.\n" +
-      s"The planet is called $planetId."
+    mongoClient.getCollection("planets").
+      findOne(MongoDBObject("system" -> solarSystemId, "name" -> planetId)).toString
   }
 
   def getMoonData(solarSystemId: String, planetId: String, moonId: String) = {

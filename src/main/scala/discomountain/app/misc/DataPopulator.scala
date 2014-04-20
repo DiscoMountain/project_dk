@@ -15,6 +15,8 @@ object DataPopulator extends App {
 
   addSolarSystem()
   addUser()
+  addSun()
+  addPlanets()
 
   def addSolarSystem() = {
     val planet1 = MongoDBObject("name" -> "p1",
@@ -41,6 +43,25 @@ object DataPopulator extends App {
       "position" -> startPosition)
 
     mongoClient.getCollection("players").insert(defaultUser)
+  }
+
+  def addSun() = {
+    mongoClient.getCollection("suns").insert(
+      MongoDBObject("system" -> "xz", "name" -> "Sun", "info" -> "This is the sun")
+    )
+  }
+
+  def addPlanets() = {
+    val planet1 = MongoDBObject("system" -> "xz", "name" -> "p1",
+      "info" -> "This is the first planet in the system")
+    val planet2 = MongoDBObject("system" -> "xz", "name" -> "p2",
+      "info" -> "This is the second planet in the system")
+    val planet3 = MongoDBObject("system" -> "xz", "name" -> "p3",
+      "info" -> "This is the third planet in the system")
+
+    mongoClient.getCollection("planets").insert(planet1)
+    mongoClient.getCollection("planets").insert(planet2)
+    mongoClient.getCollection("planets").insert(planet3)
   }
 
 }
